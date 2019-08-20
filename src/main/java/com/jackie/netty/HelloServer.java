@@ -42,7 +42,7 @@ public class HelloServer {
 
     public void start() {
         try {
-            this.f = server.bind(8088);
+            this.f = server.bind(8087);
             System.err.println("netty websocket start!!!");
 
         } catch (Exception e) {

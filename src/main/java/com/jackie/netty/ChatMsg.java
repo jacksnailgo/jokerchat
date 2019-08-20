@@ -12,31 +12,24 @@ public class ChatMsg implements Serializable {
     public String getSenderId() {
         return senderId;
     }
-
     public String getReceiverId() {
         return receiverId;
     }
-
     public String getMsg() {
         return msg;
     }
-
     public String getMsgId() {
         return msgId;
     }
-
     public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
-
     public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
     }
-
     public void setMsg(String msg) {
         this.msg = msg;
     }
-
     public void setMsgId(String msgId) {
         this.msgId = msgId;
     }
