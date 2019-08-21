@@ -14,6 +14,6 @@ public class HelloController {
 
     @RequestMapping("/bye")
     private String sayGoodBye() {
-        return null;
+        return "goodBye to joker-chat";
     }
 }

@@ -18,7 +18,7 @@ public class MyHelloHandler extends SimpleChannelInboundHandler<Object> {
         ByteBuf content = Unpooled.copiedBuffer("hello-netty!", CharsetUtil.UTF_8);
 
         //构建HttpResponse
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.BAD_REQUEST, content);
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
 
         response.headers().set(HttpHeaderNames.CONTENT_LENGTH, content.writableBytes());
         response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");

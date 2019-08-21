@@ -49,7 +49,7 @@ public class UserServiceImp implements UserService {
         //TODO  为每个用户生成二维码
         users.setQrcode("");
         users.setId(userId);
-
+        users.setNickname("");
         usersMapper.insert(users);
         return users;
     }

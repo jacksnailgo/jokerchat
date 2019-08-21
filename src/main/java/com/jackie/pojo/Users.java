@@ -34,7 +34,9 @@ public class Users {
      * 新用户注册后默认后台生成二维码，并且上传到fastdfs
      */
     private String qrcode;
-
+    /**
+     * 每台手机唯一的cid
+     */
     private String cid;
 
     /**

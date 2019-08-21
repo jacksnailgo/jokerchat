@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/registerOrLogin")
     public JSONResult registerOrLogin(@RequestBody Users user) throws Exception {
+        System.out.println(user.getUsername() + "进入.");
         //0.判断用户名和密码不能为空
         if (StringUtils.isBlank(user.getUsername())
                 || StringUtils.isBlank(user.getPassword())) {
@@ -50,7 +51,7 @@ public class UserController {
         }
         UsersVo usersVo = new UsersVo();
         BeanUtils.copyProperties(result, usersVo);
-
+        System.out.println();
 
         return JSONResult.ok(usersVo);
     }
