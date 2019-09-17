@@ -17,7 +17,8 @@ mybatis的逆向生成工具，将SQL中的表逆向生成：Mapper、pojo
 创建UserController，添加用户登录/注册方法
 	7. 
 此时创建Service接口以及Impl。  新建方法：queryUserExist \saveUser\
-
+    8.整合linux服务器上的fastDFS，配置图片服务器系统
+    
 前端流程：
 mui项目流程：
 1.index.html中， mui.init()   对通知栏的颜色处理  ：mui.plusReady()  

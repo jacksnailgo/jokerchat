@@ -1,8 +1,11 @@
 package com.jackie.controller;
 
 import com.jackie.pojo.Users;
+import com.jackie.pojo.bo.UsersBo;
 import com.jackie.pojo.vo.UsersVo;
 import com.jackie.service.UserService;
+import com.jackie.utils.FastDFSClient;
+import com.jackie.utils.FileUtils;
 import com.jackie.utils.JSONResult;
 import com.jackie.utils.MD5Utils;
 import org.apache.catalina.User;
@@ -13,13 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("u")
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private FastDFSClient fastDFSClient;
     @PostMapping("/registerOrLogin")
     public JSONResult registerOrLogin(@RequestBody Users user) throws Exception {
         System.out.println(user.getUsername() + "进入.");
@@ -54,6 +59,34 @@ public class UserController {
         System.out.println();
 
         return JSONResult.ok(usersVo);
+    }
+
+    @PostMapping("/uploadFaceBase64")
+    public JSONResult uploadFaceBase64(@RequestBody UsersBo usersBo) throws Exception {
+        //获取前端传送过来的base64字符串，然后转换为文件对象再上传
+        String base64Data = usersBo.getUserData();
+        //定义路径
+        String userFacePath = "C:\\" + usersBo.getUserId() + "userface64.png";
+        FileUtils.base64ToFile(userFacePath, base64Data);
+        MultipartFile multipartFile = FileUtils.fileToMultipart(userFacePath);
+        //返回相应的文件地址,fastDFS存放了大图和小图
+        /**
+         大图地址：123i1yhfaef13.png  小图地址：123i1yhfaef13_80x80.png*/
+        String url = fastDFSClient.uploadBase64(multipartFile);
+        System.out.println(url);
+        //获取缩略图的url
+        String thump = "_80x80.";
+        String[] strings = url.split("\\.");
+        String thumpUrl = strings[0] + thump + strings[1];
+
+        //存入数据库
+        Users user = new Users();
+        user.setId(usersBo.getUserId());
+        user.setFaceImage(thumpUrl);
+        user.setFaceImageBig(url);
+
+        userService.updateUserInfo(user);
+        return JSONResult.ok(user);
     }
 
 }

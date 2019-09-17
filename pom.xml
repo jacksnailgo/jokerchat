@@ -89,11 +89,11 @@
             <version>1.2.3</version>
         </dependency>
 
-        <!-- 高性能分布式文件服务器 -->
+        <!-- 高性能分布式文件服务器  本来是1.26.2 对应springBoot2.0.0 -->
         <dependency>
             <groupId>com.github.tobato</groupId>
             <artifactId>fastdfs-client</artifactId>
-            <version>1.26.2</version>
+            <version>1.26.7</version>
         </dependency>
 
         <dependency>

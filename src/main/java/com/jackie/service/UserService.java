@@ -26,4 +26,11 @@ public interface UserService {
      * @Date: 2019/8/20
      */
     public Users createAndSaveUsers(Users users);
+
+    /**
+     * 修改用户记录
+     */
+    Users updateUserInfo(Users users);
+
+
 }

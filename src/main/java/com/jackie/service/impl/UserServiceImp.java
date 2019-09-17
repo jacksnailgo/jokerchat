@@ -3,6 +3,7 @@ package com.jackie.service.impl;
 import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.service.UserService;
+import org.apache.catalina.User;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class UserServiceImp implements UserService {
         return result;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public Users createAndSaveUsers(Users users) {
         //用户ID
@@ -54,5 +56,17 @@ public class UserServiceImp implements UserService {
         return users;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public Users updateUserInfo(Users user) {
+        usersMapper.updateByPrimaryKeySelective(user);
+        return queryById(user.getId());
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    private Users queryById(String userId) {
+        return usersMapper.selectByPrimaryKey(userId);
+
+    }
 
 }
