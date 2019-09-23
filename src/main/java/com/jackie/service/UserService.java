@@ -32,5 +32,5 @@ public interface UserService {
      */
     Users updateUserInfo(Users users);
 
-
+    Users queryById(String id);
 }

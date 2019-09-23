@@ -51,7 +51,6 @@ public class UserServiceImp implements UserService {
         //TODO  为每个用户生成二维码
         users.setQrcode("");
         users.setId(userId);
-        users.setNickname("");
         usersMapper.insert(users);
         return users;
     }
@@ -64,9 +63,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
-    private Users queryById(String userId) {
+    public Users queryById(String userId) {
         return usersMapper.selectByPrimaryKey(userId);
 
     }
+
 
 }

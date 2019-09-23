@@ -1,6 +1,7 @@
 package com.jackie.pojo;
 
 import javax.persistence.*;
+import java.util.Date;
 
 public class Users {
     @Id
@@ -38,6 +39,20 @@ public class Users {
      * 每台手机唯一的cid
      */
     private String cid;
+    //用户创建时间
+    @Column(name = "createTime")
+    private long createTime;
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public Users() {
+    }
 
     /**
      * @return id

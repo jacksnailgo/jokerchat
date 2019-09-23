@@ -1,5 +1,6 @@
 package com.jackie.controller;
 
+import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.pojo.bo.UsersBo;
 import com.jackie.pojo.vo.UsersVo;
@@ -48,15 +49,19 @@ public class UserController {
             Users users = new Users();
             users.setUsername(user.getUsername());
             users.setPassword(MD5Utils.getMD5Str(user.getPassword()));
+            users.setCid(user.getCid());
             users.setFaceImage("");
             users.setFaceImageBig("");
+            if (user.getNickname() == null) {
+                users.setNickname(user.getUsername());
+            }
+            users.setCreateTime(System.currentTimeMillis());
             //数据库保存用户
             result = userService.createAndSaveUsers(users);
 
         }
         UsersVo usersVo = new UsersVo();
         BeanUtils.copyProperties(result, usersVo);
-        System.out.println();
 
         return JSONResult.ok(usersVo);
     }
@@ -66,7 +71,7 @@ public class UserController {
         //获取前端传送过来的base64字符串，然后转换为文件对象再上传
         String base64Data = usersBo.getUserData();
         //定义路径
-        String userFacePath = "C:\\" + usersBo.getUserId() + "userface64.png";
+        String userFacePath = "C:\\Users\\Jackie\\Desktop\\tempPicture\\" + usersBo.getUserId() + "userface64.png";
         FileUtils.base64ToFile(userFacePath, base64Data);
         MultipartFile multipartFile = FileUtils.fileToMultipart(userFacePath);
         //返回相应的文件地址,fastDFS存放了大图和小图
@@ -84,9 +89,21 @@ public class UserController {
         user.setId(usersBo.getUserId());
         user.setFaceImage(thumpUrl);
         user.setFaceImageBig(url);
+        Users updateUserInfo = userService.updateUserInfo(user);
+        return JSONResult.ok(updateUserInfo);
+    }
 
-        userService.updateUserInfo(user);
-        return JSONResult.ok(user);
+    @PostMapping("/setNickName")
+    public JSONResult setNickName(@RequestBody UsersBo usersBo) {
+        String userId = usersBo.getUserId();
+        //存入数据库
+        Users user = new Users();
+        user.setId(usersBo.getUserId());
+        user.setNickname(usersBo.getUserData());
+        Users updateUserInfo = userService.updateUserInfo(user);
+        return JSONResult.ok(updateUserInfo);
+
+
     }
 
 }
