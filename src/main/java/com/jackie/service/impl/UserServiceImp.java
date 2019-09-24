@@ -3,13 +3,19 @@ package com.jackie.service.impl;
 import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.service.UserService;
+import com.jackie.utils.FastDFSClient;
+import com.jackie.utils.FileUtils;
+import com.jackie.utils.QRCodeUtils;
 import org.apache.catalina.User;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
+
+import java.io.IOException;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -18,6 +24,10 @@ public class UserServiceImp implements UserService {
 
     @Autowired
     private Sid sid;
+    @Autowired
+    private QRCodeUtils qrCodeUtils;
+    @Autowired
+    private FastDFSClient fastDFSClient;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -47,9 +57,16 @@ public class UserServiceImp implements UserService {
         //用户ID
         String userId = sid.nextShort();
 
-
-        //TODO  为每个用户生成二维码
-        users.setQrcode("");
+        String qrcodePath = "C://Users//Jackie//Desktop//tempPicture//qrcode//" + userId + "qrcode64.png";
+        qrCodeUtils.createQRCode(qrcodePath, "wechat_qrcode:" + users.getUsername());
+        MultipartFile qrcodeFile = FileUtils.fileToMultipart(qrcodePath);
+        String qrcodeURL = "";
+        try {
+            qrcodeURL = fastDFSClient.uploadFile(qrcodeFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        users.setQrcode(qrcodeURL);
         users.setId(userId);
         usersMapper.insert(users);
         return users;
