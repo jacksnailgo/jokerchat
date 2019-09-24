@@ -15,6 +15,7 @@ public class UsersVo {
     private String faceImageBig;
     private String nickname;
     private String qrcode;
+    private long createTime;
     //  private String cid;
 
 
@@ -64,5 +65,13 @@ public class UsersVo {
 
     public String getQrcode() {
         return qrcode;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getCreateTime() {
+        return createTime;
     }
 }

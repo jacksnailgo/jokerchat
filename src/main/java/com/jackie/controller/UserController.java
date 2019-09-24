@@ -95,6 +95,7 @@ public class UserController {
 
     @PostMapping("/setNickName")
     public JSONResult setNickName(@RequestBody UsersBo usersBo) {
+        System.out.println("修改昵称");
         String userId = usersBo.getUserId();
         //存入数据库
         Users user = new Users();
