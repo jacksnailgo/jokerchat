@@ -33,4 +33,8 @@ public interface UserService {
     Users updateUserInfo(Users users);
 
     Users queryById(String id);
+
+    Integer preconditionsSearchFriends(String myUserId, String friendUserId);
+
+    Users queryUsersByUserName(String username);
 }

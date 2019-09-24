@@ -1,5 +1,6 @@
 package com.jackie.controller;
 
+import com.jackie.enums.SearchFreindEnum;
 import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.pojo.bo.UsersBo;
@@ -105,6 +106,33 @@ public class UserController {
         return JSONResult.ok(updateUserInfo);
 
 
+    }
+
+    /**
+     * 根据账号匹配查询，不是模糊查询
+     *
+     * @param usersBo
+     * @return
+     */
+    @PostMapping("/search")
+    public JSONResult search(@RequestBody UsersBo usersBo) {
+        System.out.println("搜索好友");
+        String userId = usersBo.getUserId();  //自己的ID
+        String friendName = usersBo.getUserData(); //搜索好友的名稱
+        if ("".equals(friendName)) {
+            return JSONResult.errorMsg("搜索错误");
+        }
+        // 0 代表查詢OK  1无此用户 2不可查询自己 3已添加好友
+        Integer status = userService.preconditionsSearchFriends(userId, friendName);
+        if (status == SearchFreindEnum.SUCCESS.status) {
+            Users friend = userService.queryUsersByUserName(friendName);
+            UsersVo usersVo = new UsersVo();
+            BeanUtils.copyProperties(friend, usersVo);
+            return JSONResult.ok(usersVo);
+        } else {
+            String msgByKey = SearchFreindEnum.getMsgByKey(status);
+            return JSONResult.errorMsg(msgByKey);
+        }
     }
 
 }
