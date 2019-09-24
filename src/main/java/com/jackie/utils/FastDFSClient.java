@@ -31,8 +31,9 @@ public class FastDFSClient {
      * @throws IOException
      */
     public String uploadFile(MultipartFile file) throws IOException {
+        //增加一个. ,使得file的exitName为: .png
         StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(),
-                FilenameUtils.getExtension(file.getOriginalFilename()), null);
+                FilenameUtils.getExtension("." + file.getOriginalFilename()), null);
 
         return storePath.getPath();
     }
