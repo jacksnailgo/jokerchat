@@ -135,4 +135,28 @@ public class UserController {
         }
     }
 
+    /**
+     * 添加好友
+     *
+     * @param usersBo
+     * @return
+     */
+    @PostMapping("/addFriends")
+    public JSONResult requestAddFriend(@RequestBody UsersBo usersBo) {
+        String myId = usersBo.getUserId();
+        String friendName = usersBo.getUserData();
+        if (StringUtils.isBlank(myId) || StringUtils.isBlank(friendName)) {
+            return JSONResult.errorMsg("用户名为空");
+        }
+        //前置条件
+        Integer status = userService.preconditionsSearchFriends(myId, friendName);
+        if (status == SearchFreindEnum.SUCCESS.status) {
+            userService.sendFriendRequest(myId, friendName);
+        } else {
+            String errorMsg = SearchFreindEnum.getMsgByKey(status);
+            return JSONResult.errorMsg(errorMsg);
+        }
+        return JSONResult.ok();
+    }
+
 }

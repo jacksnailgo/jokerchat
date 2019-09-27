@@ -37,4 +37,9 @@ public interface UserService {
     Integer preconditionsSearchFriends(String myUserId, String friendUserId);
 
     Users queryUsersByUserName(String username);
+
+    /**
+     * 添加好友请求记录，保存到数据库
+     */
+    void sendFriendRequest(String myId, String friendName);
 }
