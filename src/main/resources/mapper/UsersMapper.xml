@@ -13,6 +13,6 @@
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="qrcode" property="qrcode" jdbcType="VARCHAR"/>
         <result column="cid" property="cid" jdbcType="VARCHAR"/>
-        <result column="createTime" property="createTime" jdbcType="bigint"/>
+        <result column="createTime" property="createTime" jdbcType="BIGINT"/>
     </resultMap>
 </mapper>
