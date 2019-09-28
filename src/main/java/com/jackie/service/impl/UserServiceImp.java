@@ -4,14 +4,15 @@ import com.jackie.enums.SearchFreindEnum;
 import com.jackie.mapper.FriendsRequestMapper;
 import com.jackie.mapper.MyFriendsMapper;
 import com.jackie.mapper.UsersMapper;
+import com.jackie.mapper.UsersMapperCustom;
 import com.jackie.pojo.FriendsRequest;
 import com.jackie.pojo.MyFriends;
 import com.jackie.pojo.Users;
+import com.jackie.pojo.vo.FriendRequstVo;
 import com.jackie.service.UserService;
 import com.jackie.utils.FastDFSClient;
 import com.jackie.utils.FileUtils;
 import com.jackie.utils.QRCodeUtils;
-import org.apache.catalina.User;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -37,6 +39,8 @@ public class UserServiceImp implements UserService {
     private QRCodeUtils qrCodeUtils;
     @Autowired
     private FastDFSClient fastDFSClient;
+    @Autowired
+    private UsersMapperCustom usersMapperCustom;
 
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
@@ -135,7 +139,7 @@ public class UserServiceImp implements UserService {
         Users friend = queryUsersByUserName(friendName);
 
         //查询好友记录表
-        Example example = new Example(MyFriends.class);
+        Example example = new Example(FriendsRequest.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("sendUserId", myId);
         criteria.andEqualTo("acceptUserId", friend.getId());
@@ -152,6 +156,11 @@ public class UserServiceImp implements UserService {
             friendsRequestMapper.insert(request);
 
         }
+    }
+
+    public List<FriendRequstVo> queryFriendRequestList(String acceptUserId) {
+        return usersMapperCustom.queryFriendRequestList(acceptUserId);
+
     }
 
 

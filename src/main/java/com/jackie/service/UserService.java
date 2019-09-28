@@ -2,6 +2,9 @@ package com.jackie.service;
 
 
 import com.jackie.pojo.Users;
+import com.jackie.pojo.vo.FriendRequstVo;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -42,4 +45,6 @@ public interface UserService {
      * 添加好友请求记录，保存到数据库
      */
     void sendFriendRequest(String myId, String friendName);
+
+    List<FriendRequstVo> queryFriendRequestList(String acceptUserId);
 }

@@ -4,6 +4,7 @@ import com.jackie.enums.SearchFreindEnum;
 import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.pojo.bo.UsersBo;
+import com.jackie.pojo.vo.FriendRequstVo;
 import com.jackie.pojo.vo.UsersVo;
 import com.jackie.service.UserService;
 import com.jackie.utils.FastDFSClient;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("u")
@@ -157,6 +160,20 @@ public class UserController {
             return JSONResult.errorMsg(errorMsg);
         }
         return JSONResult.ok();
+    }
+
+    @PostMapping("/getFriendsRequest")
+    public JSONResult getFriendsRequest(String userId) {
+        System.out.println("查看好友请求");
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("请求接收朋友申请错误");
+        }
+        //查询用户接收到的朋友申请
+        List<FriendRequstVo> friendRequstVos = userService.queryFriendRequestList(userId);
+        for (FriendRequstVo vo : friendRequstVos) {
+            System.out.println("好友请求" + vo.getSendUserId() + "," + vo.getSendUserName());
+        }
+        return JSONResult.ok(friendRequstVos);
     }
 
 }
