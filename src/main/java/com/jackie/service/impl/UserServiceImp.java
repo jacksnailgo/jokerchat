@@ -9,6 +9,7 @@ import com.jackie.pojo.FriendsRequest;
 import com.jackie.pojo.MyFriends;
 import com.jackie.pojo.Users;
 import com.jackie.pojo.vo.FriendRequstVo;
+import com.jackie.pojo.vo.FriendVo;
 import com.jackie.service.UserService;
 import com.jackie.utils.FastDFSClient;
 import com.jackie.utils.FileUtils;
@@ -71,7 +72,7 @@ public class UserServiceImp implements UserService {
         String userId = sid.nextShort();
 
         String qrcodePath = "C://Users//Jackie//Desktop//tempPicture//qrcode//" + userId + "qrcode64.png";
-        qrCodeUtils.createQRCode(qrcodePath, "wechat_qrcode:" + users.getUsername());
+        qrCodeUtils.createQRCode(qrcodePath, "jokerchat_qrcode:" + users.getUsername());
         MultipartFile qrcodeFile = FileUtils.fileToMultipart(qrcodePath);
         String qrcodeURL = "";
         try {
@@ -160,6 +161,47 @@ public class UserServiceImp implements UserService {
 
     public List<FriendRequstVo> queryFriendRequestList(String acceptUserId) {
         return usersMapperCustom.queryFriendRequestList(acceptUserId);
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public int deleteFriendRequest(String sendId, String accept_userId) {
+        Example example = new Example(FriendsRequest.class);
+        Example.Criteria criteria = example.createCriteria();
+        //这里的顺序一定不能颠倒！！！
+        criteria.andEqualTo("sendUserId", accept_userId);
+        criteria.andEqualTo("acceptUserId", sendId);
+        return friendsRequestMapper.deleteByExample(example);
+
+    }
+
+    /**
+     * 通过好友请求
+     * 1.保存好友saveFriends 2.逆向保存好友 3.删除好友请求记录
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void acceptFriendRequest(String sendId, String accept_userId) {
+        saveFriends(sendId, accept_userId);
+        saveFriends(accept_userId, sendId);
+        int result = deleteFriendRequest(sendId, accept_userId);
+        System.out.println("sqlCommandResult=" + result);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    private void saveFriends(String sendId, String accept_userId) {
+        MyFriends myFriends = new MyFriends();
+        String id = sid.nextShort();
+        myFriends.setId(id);
+        myFriends.setMyUserId(sendId);
+        myFriends.setMyFriendUserId(accept_userId);
+        myFriendsMapper.insert(myFriends);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<FriendVo> getFriendsList(String userId) {
+        return usersMapperCustom.queryFriendsList(userId);
 
     }
 

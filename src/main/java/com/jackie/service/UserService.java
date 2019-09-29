@@ -3,6 +3,7 @@ package com.jackie.service;
 
 import com.jackie.pojo.Users;
 import com.jackie.pojo.vo.FriendRequstVo;
+import com.jackie.pojo.vo.FriendVo;
 
 import java.util.List;
 
@@ -47,4 +48,16 @@ public interface UserService {
     void sendFriendRequest(String myId, String friendName);
 
     List<FriendRequstVo> queryFriendRequestList(String acceptUserId);
+
+    /**
+     * 删除好友请求
+     */
+    int deleteFriendRequest(String sendId, String accepterId);
+
+    /**
+     * 通过好友请求1.保存好友 2.逆向保存好友 3.删除好友请求记录
+     */
+    void acceptFriendRequest(String sendId, String accepterId);
+
+    List<FriendVo> getFriendsList(String userId);
 }

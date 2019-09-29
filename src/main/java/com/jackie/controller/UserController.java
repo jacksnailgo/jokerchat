@@ -1,17 +1,17 @@
 package com.jackie.controller;
 
+import com.jackie.enums.FriendRequestOperationTypeEnum;
 import com.jackie.enums.SearchFreindEnum;
-import com.jackie.mapper.UsersMapper;
 import com.jackie.pojo.Users;
 import com.jackie.pojo.bo.UsersBo;
 import com.jackie.pojo.vo.FriendRequstVo;
+import com.jackie.pojo.vo.FriendVo;
 import com.jackie.pojo.vo.UsersVo;
 import com.jackie.service.UserService;
 import com.jackie.utils.FastDFSClient;
 import com.jackie.utils.FileUtils;
 import com.jackie.utils.JSONResult;
 import com.jackie.utils.MD5Utils;
-import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +174,37 @@ public class UserController {
             System.out.println("好友请求" + vo.getSendUserId() + "," + vo.getSendUserName());
         }
         return JSONResult.ok(friendRequstVos);
+    }
+
+    @PostMapping("/operateFriendRequest")
+    public JSONResult operateFriendRequest(String userId, String friendId, Integer type) {
+        System.out.println("操作好友请求");
+        if (StringUtils.isBlank(userId)
+                || StringUtils.isBlank(friendId)
+                || type == null) {
+            return JSONResult.errorMsg("");
+        }
+        //1.如果没有对应枚举值，操作失败
+        if (StringUtils.isBlank(FriendRequestOperationTypeEnum.getMsgByType(type))) {
+            return JSONResult.errorMsg("没有对应操作类型");
+        } else if (type == FriendRequestOperationTypeEnum.ACCEPT.getType()) {
+            //接受好友请求
+            userService.acceptFriendRequest(userId, friendId);
+        } else if (type == FriendRequestOperationTypeEnum.IGNOGRE.getType()) {
+            //忽略好友请求
+            userService.deleteFriendRequest(userId, friendId);
+        }
+
+        return JSONResult.ok();
+    }
+
+    @PostMapping("/getFriendsList")
+    public JSONResult getFriendsList(String userId) throws Exception {
+        if (StringUtils.isBlank(userId)) {
+            return JSONResult.errorMsg("id为空");
+        }
+        List<FriendVo> friendList = userService.getFriendsList(userId);
+        return JSONResult.ok(friendList);
     }
 
 }

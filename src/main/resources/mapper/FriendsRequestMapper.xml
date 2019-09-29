@@ -10,4 +10,6 @@
         <result column="accept_user_id" property="acceptUserId" jdbcType="VARCHAR"/>
         <result column="request_date_time" property="requestDateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+
 </mapper>
