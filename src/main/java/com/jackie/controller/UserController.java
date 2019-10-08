@@ -201,7 +201,7 @@ public class UserController {
     @PostMapping("/getFriendsList")
     public JSONResult getFriendsList(String userId) throws Exception {
         if (StringUtils.isBlank(userId)) {
-            return JSONResult.errorMsg("id为空");
+            return JSONResult.errorMsg("获取好友列表失败");
         }
         List<FriendVo> friendList = userService.getFriendsList(userId);
         return JSONResult.ok(friendList);
